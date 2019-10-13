@@ -1,17 +1,18 @@
 <template>
   <div id="app">
     <Navbar />
+    <Index />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Index from "./components/Index.vue";
 import Navbar from "./components/Navbar";
 
 export default {
   name: "app",
   components: {
-    HelloWorld,
+    Index,
     Navbar
   }
 };
