@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import db from "@/firebase/init";
+
 export default {
   name: "Index",
   props: {
@@ -22,28 +24,33 @@ export default {
   },
   data() {
     return {
-      smoothies: [
-        {
-          id: 1,
-          title: "Ninja Smoothies",
-          slug: "ninja-brew",
-          ingredients: ["bananas", "cofee", "milk"]
-        },
-        {
-          id: 2,
-          title: "Morning Mood",
-          slug: "morning-mood",
-          ingredients: ["mango", "lime", "juice"]
-        }
-      ]
+      smoothies: []
     };
   },
   methods: {
     deleteSmoothie(id) {
-      this.smoothies = this.smoothies.filter(response => {
-        return response.id != id;
-      });
+      //delete from firestore
+      db.collection("smoothies")
+        .doc(id)
+        .delete()
+        .then(() => {
+          this.smoothies = this.smoothies.filter(response => {
+            return response.id != id;
+          });
+        });
     }
+  },
+  created() {
+    //fetch from firestore
+    db.collection("smoothies")
+      .get()
+      .then(response => {
+        response.forEach(element => {
+          let smoothie = element.data();
+          smoothie.id = element.id;
+          this.smoothies.push(smoothie);
+        });
+      });
   }
 };
 </script>
